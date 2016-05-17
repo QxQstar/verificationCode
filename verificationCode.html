@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>验证码计时</title>
+</head>
+<body>
+	<input type='text'>
+	<button type='button' id='mybtn'>获取验证码</button>
+	<script type="text/javascript">
+	var mybtn = document.getElementById('mybtn');
+	var eventUntil = {
+		addEvent:function(element,type,hander){
+			if(element.addEventListener){
+				element.addEventListener(type,hander,false);
+			}else if(element.attachEvent){
+				element.attachEvent('on' + type,hander);
+			}else{
+				element['on'+type] = hander;
+			}
+		},
+		getEvent:function(event){
+			return event?event:window.event;
+		},
+		getTarget:function(event){
+			return event.srcElement||event.target;
+		}
+	};
+	var hander = function(event){
+		var event = eventUntil.getEvent(event);
+		var target = eventUntil.getTarget(event);
+		target.disabled = true;
+		var timer = 60;
+		var ID = setInterval(function(){
+			timer--;
+			if(timer <= 0){
+			clearInterval(ID);
+			target.firstChild.nodeValue = '获取验证码';
+			target.disabled = false;
+			}else{
+				target.firstChild.nodeValue = timer + '后重发验证码';
+			}
+		},1000);
+	 };
+	eventUntil.addEvent(mybtn,'click',hander);
+	</script>
+</body>
+</html>
